@@ -17,9 +17,10 @@ for (crime in crimes) {
     var url = 'http://www.crimemapping.com/DetailedReport.aspx?db='+bmonth+'/'+bday+'/'+byear+'+00:00:00&de='+emonth+'/'+eday+'/'+eyear+'+23:59:00&ccs='+crimes[crime]+'&xmin='+xmin+'&ymin='+ymin+'&xmax='+xmax+'&ymax='+ymax;
     request(url, (function(crime) { return function(err, resp, body) {
     	$ = cheerio.load(body);
-    	$('.report tr td').each(function() {
-    	    $(this).find('span').each(function() {
-    		console.log($(this).text().trim());
+    	$('.report tr').each(function() {
+    	    $(this).find('td span').each(function() {		
+		event = $(this).text().trim();
+    		console.log(event);
     	    });
     	});
     }})(crime));
