@@ -1,6 +1,12 @@
 var request = require('request');
 var cheerio = require('cheerio');
 
+var gm = require('googlemaps');
+
+/*gm.geocode('800 BLOCK UNIVERSITY AVE', function(err, data){
+  console.log(data);
+});*/
+
 bmonth = '10';
 bday = '30';
 byear = '2014';
@@ -31,15 +37,20 @@ crime_types = {
     'weapons' : 'WE'
 };
 
+order = ['description','case','address','agency','date'];
+
 for (crime in crime_types) {
     var url = 'http://www.crimemapping.com/DetailedReport.aspx?db='+bmonth+'/'+bday+'/'+byear+'+00:00:00&de='+emonth+'/'+eday+'/'+eyear+'+23:59:00&ccs='+crime_types[crime]+'&xmin='+xmin+'&ymin='+ymin+'&xmax='+xmax+'&ymax='+ymax;
     request(url, (function(crime) { return function(err, resp, body) {
     	$ = cheerio.load(body);
     	$('.report tr').each(function() {
-    	    $(this).find('td span').each(function() {		
-		event = $(this).text().trim();
-    		console.log(event);
+            var incident = {'crimetype': crime_types[crime]};
+    	    $(this).find('td span').each(function(i) {
+                var field = order[i];		
+		      incident[field] = $(this).text().trim();
+    
     	    });
+            console.log(incident);
     	});
     }})(crime));
 }
