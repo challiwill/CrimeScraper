@@ -40,7 +40,6 @@ Meteor.startup(function () {
 	    eyear+'+23:59:00&ccs='+crime_types[crime]+'&xmin='+xmin+'&ymin='+
 	    ymin+'&xmax='+xmax+'&ymax='+ymax;
 	result = Meteor.http.get(url);
-//	Request(url, (function(crime) { return function(err, resp, body) {
     	$ = Cheerio.load(result.content);
     	$('.report tr').each(function() {
 	    var incident = {'crimetype': crime_types[crime]};
@@ -50,7 +49,6 @@ Meteor.startup(function () {
     	    });
 	    Crimes.insert(incident);
     	});
-//    }})(crime));
     }
 
 });
