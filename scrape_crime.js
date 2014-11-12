@@ -46,8 +46,7 @@ for (crime in crime_types) {
             var incident = {'crimetype': crime_types[crime]};
     	    $(this).find('td span').each(function(i) {
                 var field = order[i];		
-		      incident[field] = $(this).text().trim();
-    
+		incident[field] = $(this).text().trim();
     	    });
             console.log(incident);
     	});
