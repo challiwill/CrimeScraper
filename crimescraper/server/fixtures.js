@@ -1,3 +1,5 @@
+var Cheerio = Npm.require('cheerio');
+
 if (Crimes.find().count() == 0) {
 
     bmonth = '10';
@@ -41,7 +43,7 @@ if (Crimes.find().count() == 0) {
     	$('.report tr').each(function() {
 	    var incident = {'crimetype': crime_types[crime]};
     	    $(this).find('td span').each(function(i) {
-		var field = order[i];		
+		var field = order[i];
 		incident[field] = $(this).text().trim();
     	    });
 	    Crimes.insert(incident);
