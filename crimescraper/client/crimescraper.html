@@ -1,26 +1,22 @@
 <head>
   <title>crimescraper</title>
+
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
 </head>
 
 <body>
   <h1>Welcome to Meteor!</h1>
 
-  {{> hello}}
+   {{#constant}}<div id="map">{{/constant}} 
 
   {{#each crime}}
   	<p>{{description}}</p>
   	<p>{{address}}</p>
   	<p>{{agency}}</p>
   	<p>{{lat}}</p>
+    <p>{{long}}</p>
   {{/each}}
 
 </body>
-
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
-</template>
-
-<template name="crime">
-	<p>{{crimetype}}</p>
-</template>

@@ -57,24 +57,24 @@ if (Crimes.find().count() == 0) {
 
 	    	    });
 
-	    	    gm.geocode(incident['address'] + 'Berkeley CA', function(err, data){
-	    	    		if(err) {
-	    	    			console.log(err);
-	    	    		}
-	 					else {
-	 						incident['lat'] = data.results[0].geometry.location.lat;
-	 						incident['long'] = data.results[0].geometry.location.lng;
-		 					console.log(incident);
-		 					counter = counter + 1;
-		 					console.log('Counter is' + counter);
-			   				Crimes.insert(incident);
-			   				
-			   			}
-	 			});
+	    	    if(incident['address'] != '-') {
+		    	    gm.geocode(incident['address'] + 'Berkeley CA', Meteor.bindEnvironment(function(err, data){
+		    	    		if(err) {
+		    	    			console.log(err);
+		    	    		}
+		 					else {
+		 						incident['lat'] = data.results[0].geometry.location.lat;
+		 						incident['long'] = data.results[0].geometry.location.lng;
+			 					console.log(incident);
+			 					counter = counter + 1;
+			 					console.log('Counter is' + counter);
+				   				Crimes.insert(incident);
+				   				
+				   			}
+		 			}, function(error) {console.log( error);}));
+    			}
     		}
     	});
-    }
 
-    console.log(counter);
-
+	}
 }
