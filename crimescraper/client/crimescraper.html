@@ -6,9 +6,21 @@
   <h1>Welcome to Meteor!</h1>
 
   {{> hello}}
+
+  {{#each crime}}
+  	<p>{{description}}</p>
+  	<p>{{address}}</p>
+  	<p>{{agency}}</p>
+  	<p>{{lat}}</p>
+  {{/each}}
+
 </body>
 
 <template name="hello">
   <button>Click Me</button>
   <p>You've pressed the button {{counter}} times.</p>
+</template>
+
+<template name="crime">
+	<p>{{crimetype}}</p>
 </template>

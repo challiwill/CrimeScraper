@@ -15,5 +15,20 @@ if (Meteor.isClient) {
 	}
     });
 
-    Meteor.subscribe('crimes');
+    var crimelist;
+
+    Meteor.subscribe('crimes', function() {
+    	//Template.body.crime = function() { return Crimes.find(); };
+    	/*crimelist = Crimes.find().fetch();
+    	console.log(crimelist);*/
+
+    	
+  	});
+
+    Template.body.helpers({
+    	crime: function () {
+      		return Crimes.find({});
+    	}
+   		});
+    
 }
