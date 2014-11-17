@@ -21,9 +21,9 @@ if (Crimes.find().count() == 0) {
     ymax = '4563184.9737941185';
 
     crime_types = {
-	//'arson' : 'AR',
+	'arson' : 'AR',
 	'assault' : 'AS',
-	/*'burglary' : 'BU',
+	'burglary' : 'BU',
 	'disturbing the peace' : 'DP',
 	'drugs/alcohol violations' : 'DR',
 	'dui' : 'DU',
@@ -35,7 +35,7 @@ if (Crimes.find().count() == 0) {
 	'theft/larceny' : 'TH',
 	'vandalism' : 'VA',
 	'vehicle break-in/theft' : 'VB',
-	'weapons' : 'WE'*/
+	'weapons' : 'WE'
     };
 
     order = ['description','case','address','agency','date'];

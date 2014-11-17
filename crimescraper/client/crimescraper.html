@@ -9,7 +9,9 @@
 <body>
   <h1>Welcome to Meteor!</h1>
 
-   {{#constant}}<div id="map">{{/constant}} 
+ 
+  {{> map}}
+   
 
   {{#each crime}}
   	<p>{{description}}</p>
@@ -19,4 +21,9 @@
     <p>{{long}}</p>
   {{/each}}
 
+  
 </body>
+
+<template name="map">
+   <div id="map"></div>
+ </template>

@@ -1,15 +1,40 @@
 if (Meteor.isClient) {
 
+    var map;
+    var dim = 4;
+    var zones = new Array(dim);
+    zones[1] = 0;
+    
 
-    var crimelist;
+    function test(x) {
+        var min = 37.8565551;
+        var max = 37.880698;
+        var interval = (max - min)/dim;
+        var no = (x - min)/interval;
+        return parseInt(no);
+    }
 
     Meteor.subscribe('crimes', function() {
-    	//Template.body.crime = function() { return Crimes.find(); };
-    	/*crimelist = Crimes.find().fetch();
-    	console.log(crimelist);*/
 
-    	
+        Crimes.find().forEach(function(crime) {
+
+            var latz = test(crime.lat)
+            console.log(latz);
+            if (latz < dim && latz > -1) {
+                if (latz == 1) {
+                    zones[1] += 1;
+                }
+                zones[latz] += 1;
+                console.log(zones);
+            }
+
+            marker = L.marker([crime.lat, crime.long]).addTo(map);
+            marker.bindPopup(crime.lat.toString()).openPopup();
+        })
+
   	});
+
+    //L.Icon.Default.imagePath = 'packages/mrt_leaflet/images';
 
     Template.body.helpers({
     	crime: function () {
@@ -17,26 +42,17 @@ if (Meteor.isClient) {
     	}
    		});
     
-    Template.sites.rendered = function () {
-    var map = L.map('map').setView([32.07593833337078, 34.799848388671875], 16);
+    Template.map.rendered = function () {
 
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-                     '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-        maxZoom: 18
-    }).addTo(map);
+        map = L.map('map').setView([37.869929, -122.265146], 13);
 
-    var MapIcon = L.Icon.extend({
-        options: {
-            shadowUrl: 'img/map/shadow.png'
-        }
-    });
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                         '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+            maxZoom: 18
+        }).addTo(map);  
 
-    Sites.find().fetch().forEach(function(site) {
-        var icon = new MapIcon({iconUrl: 'img/map/map-icon-undefined.png'});
-        var marker = L.marker([site.location.coords[0], site.location.coords[1]], {icon: icon});
-        marker.bindPopup('<strong>' + site.name + '</strong><br />' + site.location.address);
-        marker.addTo(map);
-    });
-};
+    };
+
+
 }
