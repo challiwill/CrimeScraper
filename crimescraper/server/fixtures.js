@@ -1,15 +1,11 @@
 var Cheerio = Npm.require('cheerio');
 var gm = Npm.require('googlemaps');
 
-/*gm.geocode('2200 BLOCK SAN PABLO AVE Berkeley CA', function(err, data){
-  console.log(data.results[0].geometry.location.lat);
-});*/
-
 var counter = 0;
 
 if (Crimes.find().count() == 0) {
 
-    bmonth = '10';
+    bmonth = '05';
     bday = '30';
     byear = '2014';
     emonth = '11';
@@ -49,13 +45,15 @@ if (Crimes.find().count() == 0) {
     	$ = Cheerio.load(result.content);
     	
     	$('.report tr').each(function(i) {
-    		if(i>1){
+    		if(i > 1){
 	 	    	var incident = {'crimetype': crime_types[crime]};
 	    	    $(this).find('td span').each(function(i) {
 					var field = order[i];
 					incident[field] = $(this).text().trim();
 
 	    	    });
+
+	    	    console.log('incident');
 
 	    	    if(incident['address'] != '-') {
 		    	    gm.geocode(incident['address'] + 'Berkeley CA', Meteor.bindEnvironment(function(err, data){

@@ -4,6 +4,7 @@ if (Meteor.isClient) {
     var dim = 4;
     var zones = new Array(dim);
     zones[1] = 0;
+    var points = new Array();
     
 
     function test(x) {
@@ -18,7 +19,7 @@ if (Meteor.isClient) {
 
         Crimes.find().forEach(function(crime) {
 
-            var latz = test(crime.lat)
+            /*var latz = test(crime.lat)
             console.log(latz);
             if (latz < dim && latz > -1) {
                 if (latz == 1) {
@@ -26,10 +27,12 @@ if (Meteor.isClient) {
                 }
                 zones[latz] += 1;
                 console.log(zones);
-            }
+            }*/
 
-            marker = L.marker([crime.lat, crime.long]).addTo(map);
-            marker.bindPopup(crime.lat.toString()).openPopup();
+            points.push(L.latLng(crime.lat, crime.long));
+
+            //marker = L.marker([crime.lat, crime.long]).addTo(map);
+            //marker.bindPopup(crime.lat.toString()).openPopup();
         })
 
   	});
@@ -49,8 +52,11 @@ if (Meteor.isClient) {
         L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
                          '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-            maxZoom: 18
+            maxZoom: 18,
+            opacity: 0.2
         }).addTo(map);  
+
+        var heat = L.heatLayer(points, {radius: 30, gradient: {0.2: 'yellow', 0.3: 'orange', 0.6: 'red'}, blur: 100}).addTo(map);
 
     };
 
