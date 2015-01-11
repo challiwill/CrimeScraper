@@ -1,4 +1,7 @@
 var Cheerio = Npm.require('cheerio');
+// TODO use OSM nominatim http://wiki.openstreetmap.org/wiki/Nominatim
+//      or other geocoding API service
+// TODO cache result effectively
 var gm = Npm.require('googlemaps');
 
 var counter = 0;
@@ -37,42 +40,43 @@ if (Crimes.find().count() == 0) {
     order = ['description','case','address','agency','date'];
 
     for (crime in crime_types) {
-		var url = 'http://www.crimemapping.com/DetailedReport.aspx?db='+bmonth+'/'+bday+'/'+byear+'+00:00:00&de='+emonth+'/'+eday+'/'+
+	var url = 'http://www.crimemapping.com/DetailedReport.aspx?db='+bmonth+'/'+bday+'/'+byear+'+00:00:00&de='+emonth+'/'+eday+'/'+
 	    eyear+'+23:59:00&ccs='+crime_types[crime]+'&xmin='+xmin+'&ymin='+
 	    ymin+'&xmax='+xmax+'&ymax='+ymax;
-		
-		result = Meteor.http.get(url);
+	
+	result = Meteor.http.get(url);
     	$ = Cheerio.load(result.content);
     	
     	$('.report tr').each(function(i) {
-    		if(i > 1){
-	 	    	var incident = {'crimetype': crime_types[crime]};
-	    	    $(this).find('td span').each(function(i) {
-					var field = order[i];
-					incident[field] = $(this).text().trim();
+    	    if(i > 1){
+	 	var incident = {'crimetype': crime_types[crime]};
+	    	$(this).find('td span').each(function(i) {
+		    var field = order[i];
+		    incident[field] = $(this).text().trim();
 
-	    	    });
+	    	});
 
-	    	    console.log('incident');
+	    	// console.log('incident');
 
-	    	    if(incident['address'] != '-') {
-		    	    gm.geocode(incident['address'] + 'Berkeley CA', Meteor.bindEnvironment(function(err, data){
-		    	    		if(err) {
-		    	    			console.log(err);
-		    	    		}
-		 					else {
-		 						incident['lat'] = data.results[0].geometry.location.lat;
-		 						incident['long'] = data.results[0].geometry.location.lng;
-			 					console.log(incident);
-			 					counter = counter + 1;
-			 					console.log('Counter is' + counter);
-				   				Crimes.insert(incident);
-				   				
-				   			}
-		 			}, function(error) {console.log( error);}));
-    			}
+	    	if(incident['address'] != '-') {
+		    gm.geocode(incident['address'] + 'Berkeley CA', Meteor.bindEnvironment(function(err, data){
+		    	if(err) {
+		    	    console.log(err);
+		    	}
+		 	else {
+			    console.log(incident);
+			    console.log(data);
+		 	    incident['lat'] = data.results[0].geometry.location.lat;
+		 	    incident['long'] = data.results[0].geometry.location.lng;
+			    counter = counter + 1;
+			    console.log('Counter is ' + counter);
+			    Crimes.insert(incident);
+			    
+			}
+		    }, function(error) {console.log( error);}));
     		}
+    	    }
     	});
 
-	}
+    }
 }
